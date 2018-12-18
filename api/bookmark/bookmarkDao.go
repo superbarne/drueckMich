@@ -29,6 +29,11 @@ func Remove(bookmark Bookmark) error {
 	return err
 }
 
+func RemoveMany(query bson.M) error {
+	_, err := database.DB.C(COLLECTION).RemoveAll(query)
+	return err
+}
+
 func Update(bookmark Bookmark) error {
 	err := database.DB.C(COLLECTION).UpdateId(bookmark.ID, &bookmark)
 	return err

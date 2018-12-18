@@ -54,7 +54,7 @@ func randStr(length int) string {
 	return str[:length]
 }
 
-func GetSessionByRequest(r *http.Request) (user.User, error) {
+func GetUserByRequest(r *http.Request) (user.User, error) {
 	cookies := r.Cookies()
 	cookieLen := len(cookies)
 	var result string = ""

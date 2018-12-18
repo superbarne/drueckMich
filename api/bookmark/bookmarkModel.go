@@ -8,8 +8,9 @@ type Bookmark struct {
 	UserId				bson.ObjectId 	`bson:"userId" json:"userId"`
 	CategoryIds		[]bson.ObjectId `bson:"categoryIds" json:"categoryIds"`
 	Title					string        	`bson:"title" json:"title"`
-	Images				[]string        `bson:"images" json:"images"`
+	ImageUrls			[]string        `bson:"images" json:"images"`
 	Url						string        	`bson:"url" json:"url"`
+	IconUrl				string        	`bson:"icon" json:"icon"`
 	Description		string        	`bson:"description" json:"description"`
 	CreatedAt			time.Time       `bson:"createdAt" json:"createdAt"`
 }

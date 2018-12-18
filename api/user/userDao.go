@@ -24,6 +24,11 @@ func Create(user User) error {
 	return err
 }
 
+func RemoveMany(query bson.M) error {
+	_, err := database.DB.C(COLLECTION).RemoveAll(query)
+	return err
+}
+
 func Remove(user User) error {
 	err := database.DB.C(COLLECTION).Remove(&user)
 	return err

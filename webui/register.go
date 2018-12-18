@@ -27,21 +27,23 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, p)
 }
 
-func loginHandler(w http.ResponseWriter, r *http.Request) {
-	p := &LoginPage{Title: "fsdfsd"}
-	if r.Method == http.MethodPost {
-		p.LoginUserResponse = loginUser(w, r)
-	}
-	t, _ := template.ParseFiles("webui/templates/login.html")
-	t.Execute(w, p)
-}
-
 func registerUser(w http.ResponseWriter, r *http.Request) (RegisterUserResponse) {
 	defer r.Body.Close()
 	var model user.User
 	r.ParseForm()
 	model.Username = strings.Join(r.Form["username"],"")
 	model.Password = strings.Join(r.Form["password"],"")
+
+	if len(model.Username) > 6 {
+		return RegisterUserResponse{Success: "Benutzername darf maximal 6 Zeichen lang sein"}
+	}
+	if len(model.Username) <= 4 {
+		return RegisterUserResponse{Success: "Benutzername muss mindestens 4 Zeichen lang sein"}
+	}
+	if len(model.Password) <= 4 {
+		return RegisterUserResponse{Success: "Passwort muss mindestens 4 Zeichen lang sein"}
+	}
+
 	model.ID = bson.NewObjectId()
 	err := user.Create(model)
 	if err != nil {

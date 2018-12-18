@@ -31,8 +31,13 @@ func Extract(bookmark *Bookmark) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	absIconUrl, err := u.Parse(bookmark.IconUrl)
+	if err == nil {
+		bookmark.IconUrl = absIconUrl.String()
+	}
 	
-	for _, wert := range bookmark.Images {
+	for _, wert := range bookmark.ImageUrls {
 		absURL, err := u.Parse(wert)
 		if err != nil {
 			log.Fatal(err)
@@ -46,9 +51,8 @@ func Extract(bookmark *Bookmark) {
 func walk(node *html.Node, bookmark *Bookmark) {
 	if node.Type == html.ElementNode && node.Data == "img" {
 		for _, img := range node.Attr {
-			if img.Key == "src" {
-				// mit nächstem int-Index auf Map pushen:
-				bookmark.Images = append(bookmark.Images, img.Val)
+			if img.Key == "src" && img.Val != "" {
+				bookmark.ImageUrls = append(bookmark.ImageUrls, img.Val)
 				break
 			}
 		}
@@ -57,10 +61,27 @@ func walk(node *html.Node, bookmark *Bookmark) {
 		bookmark.Title = node.FirstChild.Data
 	}
 	if node.Type == html.ElementNode && node.Data == "meta" {
+		ok := false
 		for _, attr := range node.Attr {
-			if attr.Key == "property" && attr.Val == "description" {
+			if attr.Key == "name" && attr.Val == "description" {
+				ok = true
+			}
+			if attr.Key == "content" && ok {
 				bookmark.Description = attr.Val
 			}
+			
+		}
+	}
+	if node.Type == html.ElementNode && node.Data == "link" {
+		ok := false
+		for _, attr := range node.Attr {
+			if attr.Key == "rel" && attr.Val == "shortcut icon" {
+				ok = true
+			}
+			if attr.Key == "href" && ok {
+				bookmark.IconUrl = attr.Val
+			}
+			
 		}
 	}
 	for child := node.FirstChild; child != nil; child = child.NextSibling {

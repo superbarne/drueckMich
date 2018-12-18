@@ -1,6 +1,7 @@
 package api
 
 import "net/http"
+import "time"
 import "gopkg.in/mgo.v2/bson"
 import "encoding/json"
 import "github.com/superbarne/drueckMich/api/bookmark"
@@ -20,9 +21,12 @@ func bookmarkHandler(w http.ResponseWriter, r *http.Request) {
 func bookmarkFindHandler(w http.ResponseWriter, r *http.Request) {
 	user, err := auth.GetUserByBasicAuth(r)
 	if err != nil {
-		panic(err)
+		user, err = auth.GetUserByRequest(r)
+		if err != nil {
+			panic(err)
+		}
 	}
-	res, err := bookmark.Find(bson.M{"userId": user.ID}, "")
+	res, err := bookmark.Find(bson.M{"userId": user.ID}, "createdAt")
 	if err != nil {
 		panic(err)
 	}
@@ -39,6 +43,7 @@ func bookmarkCreateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	var entity bookmark.Bookmark
 	entity.UserId = user.ID
+	entity.CreatedAt = time.Now()
 	if err := json.NewDecoder(r.Body).Decode(&entity); err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return

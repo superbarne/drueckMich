@@ -16,9 +16,10 @@ type BookmarkListPage struct {
 	Categories []category.Category
 	CategoriesMap map[bson.ObjectId]category.Category
 	FilterByCategory category.Category
+	SearchTerm string
 }
 
-func handleActions(r *http.Request, user user.User) {
+func handleActions(w http.ResponseWriter, r *http.Request, me user.User) {
 	action := r.URL.Query().Get("action")
 	switch(action) {
 		case "remove":
@@ -35,7 +36,7 @@ func handleActions(r *http.Request, user user.User) {
 			url := r.URL.Query().Get("url")
 			entity := bookmark.Bookmark{
 				ID: bson.NewObjectId(),
-				UserId: user.ID,
+				UserId: me.ID,
 				CreatedAt: time.Now(),
 				Url: url,
 			}
@@ -80,6 +81,20 @@ func handleActions(r *http.Request, user user.User) {
 				panic(err)
 			}
 			break;
+		case "removeUser":
+			bookmark.RemoveMany(bson.M{
+				"userId": me.ID,
+			})
+			category.RemoveMany(bson.M{
+				"userId": me.ID,
+			})
+			user.Remove(me)
+			expiration := time.Unix(0, 0)
+			cookie := http.Cookie{Name: "sessionId", Value: "", Expires: expiration}
+			http.SetCookie(w, &cookie)
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return;
+			break;
 	}
 }
 
@@ -95,25 +110,49 @@ func SliceIndex(limit int, predicate func(i int) bool) int {
 func bookmarkListHandler(w http.ResponseWriter, r *http.Request) {
 	p := &BookmarkListPage{Title: "fsdfsd"}
 
-	user, err := auth.GetSessionByRequest(r)
+	user, err := auth.GetUserByRequest(r)
 	if (err != nil) {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return;
 	}
-	handleActions(r, user)
+	handleActions(w, r, user)
 	p.User = user
 	sort := r.URL.Query().Get("sort")
 	if sort == "" {
 		sort = "-createdAt"
 	}
+	query := bson.M{"userId": user.ID}
 	filterByCategoryId := r.URL.Query().Get("filterByCategoryId")
-	var filterByCategory category.Category
+	search := r.URL.Query().Get("search")
+	if search != "" {
+		p.SearchTerm = search
+		term := `(?i)`+search
+		query["$or"] = [...]bson.M{
+			bson.M{
+				"title": bson.M{
+					"$regex": term,
+				},
+			},
+			bson.M{
+				"description": bson.M{
+					"$regex": term,
+				},
+			},
+			bson.M{
+				"url": bson.M{
+					"$regex": term,
+				},
+			},
+		}
+	}
+ 	var filterByCategory category.Category
 	var bookmarks []bookmark.Bookmark
 	if filterByCategoryId != "" {
 		filterByCategory, _ = category.Get(filterByCategoryId)
-		bookmarks, _ = bookmark.Find(bson.M{"userId": user.ID, "categoryIds": filterByCategory.ID  }, sort)
+		query["categoryIds"] = filterByCategory.ID
+		bookmarks, _ = bookmark.Find(query, sort)
 	} else {
-		bookmarks, _ = bookmark.Find(bson.M{"userId": user.ID }, sort)
+		bookmarks, _ = bookmark.Find(query, sort)
 	}
 	categories, err := category.Find(bson.M{"userId": user.ID }, "name")
 	p.Bookmarks = bookmarks

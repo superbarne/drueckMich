@@ -45,7 +45,7 @@ func handleCategoryActions(r *http.Request, user user.User) {
 func categoryListHandler(w http.ResponseWriter, r *http.Request) {
 	p := &CategoryListPage{Title: "fsdfsd"}
 
-	user, err := auth.GetSessionByRequest(r)
+	user, err := auth.GetUserByRequest(r)
 	if (err != nil) {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return;

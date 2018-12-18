@@ -29,12 +29,20 @@
       <a href="?filterByCategoryId={{$category.ID.Hex}}">{{$category.Name}}</a>
     {{end}}
   </p>
+  <p>
+    <form>
+      <input type="search" value="{{.SearchTerm}}" name="search">
+      <input type="hidden" value="{{.FilterByCategory.ID.Hex}}" name="filterByCategoryId">
+      <button type="submit">Suche</button>
+    </form>
+  </p>
 
   {{ $categoriesMap := .CategoriesMap }}
   {{range $bookmark := .Bookmarks}}
     <details>
       <summary>
-        <a target="_blank" href="{{$bookmark.Url}}">{{$bookmark.Url}}</a>
+        <img src="{{$bookmark.IconUrl}}" height="14px">
+        <a target="_blank" href="{{$bookmark.Url}}">{{$bookmark.Title}}</a>
         <a href="?action=remove&id={{$bookmark.ID.Hex}}">X</a>
       </summary>
       <form>
@@ -61,5 +69,30 @@
       </ul>
     </details>
   {{end}}
+
+  {{if eq .SearchTerm ""}}
+    {{if eq .FilterByCategory.ID.Hex ""}}
+      <script>
+        let bookmarksCount = {{len .Bookmarks}}
+        function checkChanges() {
+          fetch("/bookmark")
+            .then(res => res.json())
+            .then(bookmarks => {
+              if (bookmarks.length != bookmarksCount) {
+                location.reload();
+              }
+              bookmarksCount = bookmarks.length
+              setTimeout(checkChanges, 5000)
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        }
+        checkChanges()
+      </script>
+  {{ end }}
+  {{ end }}
+
+  <a href="?action=removeUser">Benutzer löschen</a>
 </body>
 </html>

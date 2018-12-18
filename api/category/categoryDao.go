@@ -24,6 +24,11 @@ func Create(category Category) error {
 	return err
 }
 
+func RemoveMany(query bson.M) error {
+	_, err := database.DB.C(COLLECTION).RemoveAll(query)
+	return err
+}
+
 func Remove(category Category) error {
 	err := database.DB.C(COLLECTION).Remove(&category)
 	return err
