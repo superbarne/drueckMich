@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/static/style.css">
+  <title>{{.Title}}</title>
+</head>
+<body>
+  <form class="container login" method="post">
+    {{if .RegisterUserResponse.Success}}<p class="alert alert-success">{{.RegisterUserResponse.Success}}</p>{{end}}
+    {{if .RegisterUserResponse.Err}}<p class="alert alert-err">{{.RegisterUserResponse.Err}}</p>{{end}}
+    <input type="text" name="username">
+    <input type="password" name="password">
+    <button type="submit">Registrieren</button>
+  </form>
+</body>
+</html>

@@ -1,0 +1,65 @@
+{{ $categories := .Categories }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <a href="/category">Kategorien</a>
+  <form>
+    <input type="url" name="url">
+    <input type="hidden" name="action" value="create">
+    <select name="categoryId">
+        {{range $category := .Categories}}
+          <option value="{{$category.ID.Hex}}">{{$category.Name}}</option>
+        {{end}}
+    </select>
+    <button type="submit">Erstellen</button>
+  </form>
+  <p>
+    <b>Sortieren:</b> Erstllungsdatum <a href="?sort=-createdAt">▲</a><a href="?sort=createdAt">▼</a> | Titel <a href="?sort=-title">▲</a><a href="?sort=title">▼</a>
+  </p>
+  <p>
+    <b>Filter:</b>
+    <a href="?filterByCategoryId=">Alle</a>
+    {{range $category := $categories}}
+      <a href="?filterByCategoryId={{$category.ID.Hex}}">{{$category.Name}}</a>
+    {{end}}
+  </p>
+
+  {{ $categoriesMap := .CategoriesMap }}
+  {{range $bookmark := .Bookmarks}}
+    <details>
+      <summary>
+        <a target="_blank" href="{{$bookmark.Url}}">{{$bookmark.Url}}</a>
+        <a href="?action=remove&id={{$bookmark.ID.Hex}}">X</a>
+      </summary>
+      <form>
+        <input type="url" name="url" value="{{$bookmark.Url}}">
+        <input type="hidden" name="action" value="update">
+        <input type="hidden" name="id" value="{{$bookmark.ID.Hex}}">
+        <textarea name="description">{{$bookmark.Description}}</textarea>
+        <button type="submit">Speichern</button>
+      </form>
+      <form>
+        <input type="hidden" name="action" value="addCategory">
+        <input type="hidden" name="id" value="{{$bookmark.ID.Hex}}">
+        <select name="categoryId">
+          {{range $category := $categories}}
+            <option value="{{$category.ID.Hex}}">{{$category.Name}}</option>
+          {{end}}
+        </select>
+        <button type="submit">Kategorie Hinzufügen</button>
+      </form>
+      <ul>
+        {{range $categoryId := $bookmark.CategoryIds}}
+          <li>{{(index $categoriesMap $categoryId).Name}} <a href="?action=removeCategory&categoryId={{(index $categoriesMap $categoryId).ID.Hex}}&bookmarkId={{$bookmark.ID.Hex}}">X</a></li>
+        {{end}}
+      </ul>
+    </details>
+  {{end}}
+</body>
+</html>

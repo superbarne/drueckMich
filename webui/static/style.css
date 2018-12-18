@@ -1,0 +1,11 @@
+body, html {
+  margin: 0px;
+}
+
+.container {
+  margin: 0px auto;
+}
+
+.login {
+  width: 250px;
+}
