@@ -9,11 +9,12 @@
 </head>
 <body>
   <form class="container login" method="post">
-    {{if .LoginUserResponse.Success}}<p class="alert alert-success">{{.LoginUserResponse.Success}}</p>{{end}}
-    {{if .LoginUserResponse.Err}}<p class="alert alert-err">{{.LoginUserResponse.Err}}</p>{{end}}
-    <input type="text" name="username">
-    <input type="password" name="password">
-    <button type="submit">Login</button>
+    {{if .LoginUserResponse.Success}}<p class="alert alert-success mt-1">{{.LoginUserResponse.Success}}</p>{{end}}
+    {{if .LoginUserResponse.Err}}<p class="alert alert-err mt-1">{{.LoginUserResponse.Err}}</p>{{end}}
+    <input type="text" class="block mt-1" name="username" placeholder="Benutzername">
+    <input type="password" class="block mt-1" name="password" placeholder="Passwort">
+    <button type="submit" class="block btn mt-1">Login</button>
+    <a href="/register">Registrieren</a>
   </form>
 </body>
 </html>

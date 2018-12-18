@@ -4,26 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/static/style.css">
   <title>Document</title>
 </head>
 <body>
-  <a href="/app">Bookmarks</a>
-  <a href="/category-wvr">Kategorien WVR</a>
-  <p>
-    <b>Sortieren:</b> Erstllungsdatum <a href="?sort=-createdAt">▲</a><a href="?sort=createdAt">▼</a> | Name <a href="?sort=-name">▲</a><a href="?sort=name">▼</a>
-  </p>
-  <form>
-    <input type="text" name="name">
-    <input type="hidden" name="action" value="create">
-    <button type="submit">Erstellen</button>
-  </form>
-  <table>
-    {{range $i, $a := .Categorys}}
-    <tr>
-      <td><a href="{{$a.Name}}" target="_blank">{{$a.Name}}</a></td>
-      <td><a href="?action=remove&id={{$a.ID.Hex}}">X</a></td>
-    </tr>
-    {{end}}
-  </table>
+  <div class="container">
+    <a class="chip" href="/app">Bookmarks</a>
+    <a class="chip" href="/category">Kategorien</a>
+    <a class="chip" href="/category-wvr">Kategorien WVR</a>
+    <p class="sort">
+      <b>Sortieren:</b> Erstllungsdatum <a href="?sort=-createdAt">▲</a><a href="?sort=createdAt">▼</a> | Name <a href="?sort=-name">▲</a><a href="?sort=name">▼</a>
+    </p>
+    <form class="group">
+      <input type="text" name="name" class="first">
+      <input type="hidden" name="action" value="create">
+      <button type="submit" class="last btn">Erstellen</button>
+    </form>
+    <table class="block mt-2">
+      <tbody>
+        {{range $i, $a := .Categorys}}
+        <tr>
+          <td style="width:100%"><a href="{{$a.Name}}" target="_blank">{{$a.Name}}</a></td>
+          <td><a class="chip" href="?action=remove&id={{$a.ID.Hex}}">X</a></td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
 </body>
+
 </html>

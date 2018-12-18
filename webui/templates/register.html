@@ -11,9 +11,10 @@
   <form class="container login" method="post">
     {{if .RegisterUserResponse.Success}}<p class="alert alert-success">{{.RegisterUserResponse.Success}}</p>{{end}}
     {{if .RegisterUserResponse.Err}}<p class="alert alert-err">{{.RegisterUserResponse.Err}}</p>{{end}}
-    <input type="text" name="username">
-    <input type="password" name="password">
-    <button type="submit">Registrieren</button>
+    <input type="text" name="username" class="mt-1" placeholder="Benutzername">
+    <input type="password" name="password" class="mt-1" placeholder="Passwort">
+    <button type="submit" class="btn block mt-1">Registrieren</button>
+    <a href="/login" class="mt-1">Anmelden</a>
   </form>
 </body>
 </html>

@@ -1,11 +1,139 @@
+* {
+  box-sizing: border-box;
+}
+
 body, html {
   margin: 0px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
 }
 
 .container {
   margin: 0px auto;
+  width: 720px;
+  box-shadow:rgba(60, 64, 67, .3) 0 1px 2px 0,rgba(60, 64, 67, .15) 0 1px 3px 1px;
+  background-color: white;
+  border-radius:2px;
+  padding: 10px;
+  margin-top:20px;
 }
 
 .login {
   width: 250px;
+}
+
+.block {
+  display: block;
+  width:100%;
+}
+
+.mt-1 {
+  margin-top: 5px;
+}
+
+.mt-2 {
+  margin-top: 10px;
+}
+
+input[type="text"], input[type="password"], input[type="search"], input[type="url"] {
+  border: 0;
+  padding: 0 14px;
+  right: 0;
+  height: 32px;
+  font-size: 13px;
+  width: 100%;
+  border-radius: 0 4px 4px 0;
+  box-sizing: border-box;
+  position: relative;
+  color: rgba(0,0,0,0.87);
+  border-radius: 4px;
+  border: 1px solid #f1f1f1;
+}
+
+label.btn {
+  top:-1px;
+}
+.btn {
+  position: relative;
+  border: 1px solid rgb(218, 220, 224);
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  color: #1a73e8;
+  font-weight: 500;
+  height: 32px;
+  margin: 0;
+  padding: 8px 16px;
+  text-decoration: none;
+  text-transform: none;
+}
+
+summary {
+  padding: 7px;
+}
+
+summary a {
+  color:#222;
+  text-decoration: none;
+}
+
+.pull-right {
+  float: right;
+}
+
+.hide {
+  display: none;
+}
+
+.group {
+  display: flex;
+}
+
+.group .first {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  border-right: 0px;
+}
+
+.group .last {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.chip {
+  background-color: #e0e0e0;
+  color: rgba(0,0,0,.87);
+  padding: 7px 12px;
+  border-radius: 16px;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.pl-1 {
+  padding-left:5px;
+}
+
+.pr-1 {
+  padding-right:5px;
+}
+
+.sort {
+  padding: 7px 0px;
+}
+
+.sort a {
+  text-decoration: none;
+  color: rgba(0,0,0,.87);
+  padding: 3px;
+}
+
+tbody, tr, table {
+  width:100%;
+}
+
+table a {
+  color:#222;
+  text-decoration: none;
+  padding: 2px 0px;
+  display: block;
 }

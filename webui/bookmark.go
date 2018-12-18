@@ -40,7 +40,7 @@ func handleActions(w http.ResponseWriter, r *http.Request, me user.User) {
 				CreatedAt: time.Now(),
 				Url: url,
 			}
-			bookmark.Extract(&entity)
+			go bookmark.Extract(&entity)
 			err := bookmark.Create(entity)
 			if err != nil {
 				panic(err)

@@ -1,45 +1,53 @@
 {{ $categories := .Categories }}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/static/style.css">
   <title>Document</title>
 </head>
-<body>
-  <a href="/category">Kategorien</a>
-  <a href="/category-wvr">Kategorien WVR</a>
-  <form>
-    <input type="url" name="url">
-    <input type="hidden" name="action" value="create">
-    <select name="categoryId">
-        {{range $category := .Categories}}
-          <option value="{{$category.ID.Hex}}">{{$category.Name}}</option>
-        {{end}}
-    </select>
-    <button type="submit">Erstellen</button>
-  </form>
-  <p>
-    <b>Sortieren:</b> Erstllungsdatum <a href="?sort=-createdAt">▲</a><a href="?sort=createdAt">▼</a> | Titel <a href="?sort=-title">▲</a><a href="?sort=title">▼</a>
-  </p>
-  <p>
-    <b>Filter:</b>
-    <a href="?filterByCategoryId=">Alle</a>
-    {{range $category := $categories}}
-      <a href="?filterByCategoryId={{$category.ID.Hex}}">{{$category.Name}}</a>
-    {{end}}
-  </p>
-  <p>
-    <form>
-      <input type="search" value="{{.SearchTerm}}" name="search">
-      <input type="hidden" value="{{.FilterByCategory.ID.Hex}}" name="filterByCategoryId">
-      <button type="submit">Suche</button>
-    </form>
-  </p>
 
-  {{ $categoriesMap := .CategoriesMap }}
-  {{range $bookmark := .Bookmarks}}
+<body>
+  <div class="container">
+      <a class="chip" href="/app">Bookmarks</a>
+      <a class="chip" href="/category">Kategorien</a>
+      <a class="chip" href="/category-wvr">Kategorien WVR</a>
+    <form class="group mt-2">
+      <input type="url" name="url" class="first">
+      <input type="hidden" name="action" value="create">
+      <button type="submit" class="btn last">Erstellen</button>
+    </form>
+    <div class="group mt-2">
+      <div class="pr-1">
+        <b>Filter:</b>
+        <div class="mt-1">
+          <a class="chip" href="?filterByCategoryId=">Alle</a>
+          {{range $category := $categories}}
+          <a class="chip" href="?filterByCategoryId={{$category.ID.Hex}}">{{$category.Name}}</a>
+          {{end}}
+        </div>
+      </div>
+      <div class="pl-1">
+        <b>Sortieren:</b>
+        <div class="mt-1 sort">
+          Erstllungsdatum <a href="?sort=-createdAt">▲</a><a href="?sort=createdAt">▼</a> | Titel <a href="?sort=-title">▲</a><a
+            href="?sort=title">▼</a>
+        </div>
+      </div>
+    </div>
+    <p>
+      <form class="group">
+        <input type="search" value="{{.SearchTerm}}" name="search" class="first">
+        <input type="hidden" value="{{.FilterByCategory.ID.Hex}}" name="filterByCategoryId">
+        <button type="submit" class="btn last">Suche</button>
+      </form>
+    </p>
+
+    {{ $categoriesMap := .CategoriesMap }}
+    {{range $bookmark := .Bookmarks}}
     <details>
       <summary>
         <img src="{{$bookmark.IconUrl}}" height="14px">
@@ -58,47 +66,52 @@
         <input type="hidden" name="id" value="{{$bookmark.ID.Hex}}">
         <select name="categoryId">
           {{range $category := $categories}}
-            <option value="{{$category.ID.Hex}}">{{$category.Name}}</option>
+          <option value="{{$category.ID.Hex}}">{{$category.Name}}</option>
           {{end}}
         </select>
         <button type="submit">Kategorie Hinzufügen</button>
       </form>
       <ul>
         {{range $categoryId := $bookmark.CategoryIds}}
-          <li>{{(index $categoriesMap $categoryId).Name}} <a href="?action=removeCategory&categoryId={{(index $categoriesMap $categoryId).ID.Hex}}&bookmarkId={{$bookmark.ID.Hex}}">X</a></li>
+        <li>{{(index $categoriesMap $categoryId).Name}} <a href="?action=removeCategory&categoryId={{(index $categoriesMap $categoryId).ID.Hex}}&bookmarkId={{$bookmark.ID.Hex}}">X</a></li>
         {{end}}
       </ul>
     </details>
-  {{end}}
+    {{end}}
 
-  {{if eq .SearchTerm ""}}
+    {{if eq .SearchTerm ""}}
     {{if eq .FilterByCategory.ID.Hex ""}}
-      <script>
-        let bookmarksCount = {{len .Bookmarks}}
-        function checkChanges() {
-          fetch("/bookmark")
-            .then(res => res.json())
-            .then(bookmarks => {
-              if (bookmarks.length != bookmarksCount) {
-                location.reload();
-              }
-              bookmarksCount = bookmarks.length
-              setTimeout(checkChanges, 5000)
-            })
-            .catch(err => {
-              console.log(err)
-            })
-        }
-        checkChanges()
-      </script>
-  {{ end }}
-  {{ end }}
+    <script>
+      let bookmarksCount = {{len .Bookmarks}}
+            function checkChanges() {
+              fetch("/bookmark")
+                .then(res => res.json())
+                .then(bookmarks => {
+                  if (bookmarks.length != bookmarksCount) {
+                    location.reload();
+                  }
+                  bookmarksCount = bookmarks.length
+                  setTimeout(checkChanges, 5000)
+                })
+                .catch(err => {
+                  console.log(err)
+                })
+            }
+            checkChanges()
+          </script>
+    {{ end }}
+    {{ end }}
 
-  <a href="?action=removeUser">Benutzer löschen</a>
+    <footer class="mt-2">
+      <a href="?action=removeUser" class="btn pull-right">Benutzer löschen</a>
+      <form action="/import" enctype="multipart/form-data" method="post">
+        <button type="submit" class="btn">Import</button>
+        <label class="btn" for="file">Datei Auswählen</label>
+        <input type="file" name="file" id="file" class="hide" />
+      </form>
+    </footer>
+  </div>
 
-  <form action="/import" enctype="multipart/form-data" method="post">
-    <input type="file" name="file"/>
-    <button type="submit">Import</button>
-  </form>
 </body>
+
 </html>

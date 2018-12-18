@@ -44,7 +44,7 @@ func importHandler(w http.ResponseWriter, r *http.Request) {
 		item.UserId = user.ID
 		item.CreatedAt = time.Now()
 		item.ID = bson.NewObjectId()
-		// bookmark.Extract(&item)
+		go bookmark.Extract(&item)
 		bookmark.Create(item)
 	}
 

@@ -6,15 +6,18 @@ import (
 	"github.com/watson-developer-cloud/go-sdk/visualrecognitionv3"
 	"github.com/superbarne/drueckMich/api/categoryWvr"
 	"gopkg.in/mgo.v2/bson"
+	"io/ioutil"
 )
 
 func AnalyzeImage(url string, bookmark *Bookmark) {
 	// Watson Visual Recognition Service instanziieren:
+	buf, _ := ioutil.ReadFile("./apiKey.txt")
+
 	service, serviceErr := visualrecognitionv3.
 		NewVisualRecognitionV3(&visualrecognitionv3.VisualRecognitionV3Options{
 			URL:       "https://gateway.watsonplatform.net/visual-recognition/api",
 			Version:   "2018-03-19",
-			IAMApiKey: "uPQg9r6Om9LxghWPaU9mGhAJABhMZQSlnuRGH_kABUdm", // !!!!!!!!!HIER DEN EIGENEN API-KEY EINTRAGEN!!!!!!!!!!!!!
+			IAMApiKey: string(buf), 
 		})
 	if serviceErr != nil {
 		panic(serviceErr)
@@ -67,5 +70,4 @@ func AnalyzeImage(url string, bookmark *Bookmark) {
 			bookmark.CategoryWvrIds = append(bookmark.CategoryWvrIds, entity.ID)
 		}
 	}
-
 }

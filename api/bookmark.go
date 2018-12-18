@@ -48,7 +48,7 @@ func bookmarkCreateHandler(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
-	bookmark.Extract(&entity)
+	go bookmark.Extract(&entity)
 	entity.ID = bson.NewObjectId()
 
 	if err := bookmark.Create(entity); err != nil {

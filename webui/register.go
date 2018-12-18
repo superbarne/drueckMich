@@ -37,11 +37,11 @@ func registerUser(w http.ResponseWriter, r *http.Request) (RegisterUserResponse)
 	if len(model.Username) > 6 {
 		return RegisterUserResponse{Success: "Benutzername darf maximal 6 Zeichen lang sein"}
 	}
-	if len(model.Username) <= 4 {
-		return RegisterUserResponse{Success: "Benutzername muss mindestens 4 Zeichen lang sein"}
+	if len(model.Username) <= 3 {
+		return RegisterUserResponse{Success: "Benutzername muss mindestens 3 Zeichen lang sein"}
 	}
-	if len(model.Password) <= 4 {
-		return RegisterUserResponse{Success: "Passwort muss mindestens 4 Zeichen lang sein"}
+	if len(model.Password) <= 1 {
+		return RegisterUserResponse{Success: "Passwort muss mindestens 2 Zeichen lang sein"}
 	}
 
 	model.ID = bson.NewObjectId()

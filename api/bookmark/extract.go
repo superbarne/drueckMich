@@ -11,25 +11,30 @@ import (
 )
 
 func Extract(bookmark *Bookmark) {
+	log.Println("start etract")
 	pageUrl := bookmark.Url
 	res, err := http.Get(pageUrl)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return;
 	}
 	byteArrayPage, err := ioutil.ReadAll(res.Body)
 	res.Body.Close()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return;
 	}
 	docZeiger, err := html.Parse(strings.NewReader(string(byteArrayPage)))
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return;
 	}
 
 	walk(docZeiger, bookmark)
 	u, err := url.Parse(pageUrl)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return;
 	}
 
 	absIconUrl, err := u.Parse(bookmark.IconUrl)
@@ -40,12 +45,16 @@ func Extract(bookmark *Bookmark) {
 	for _, wert := range bookmark.ImageUrls {
 		absURL, err := u.Parse(wert)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
+			return;
 		}
 		wert = absURL.String()
 		AnalyzeImage(wert, bookmark)
 	}
 
+	
+	err = Update(*bookmark)
+	log.Println(err)
 }
 
 
