@@ -1,9 +1,9 @@
-package category;
+package categoryWvr;
 
 import "gopkg.in/mgo.v2/bson"
 import "time"
 
-type Category struct {
+type CategoryWvr struct {
 	ID          bson.ObjectId `bson:"_id" json:"id"`
 	UserId			bson.ObjectId `bson:"userId" json:"userId"`
 	Name				string        `bson:"name" json:"name"`

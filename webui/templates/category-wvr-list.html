@@ -8,7 +8,7 @@
 </head>
 <body>
   <a href="/app">Bookmarks</a>
-  <a href="/category-wvr">Kategorien WVR</a>
+  <a href="/category">Kategorien</a>
   <p>
     <b>Sortieren:</b> Erstllungsdatum <a href="?sort=-createdAt">▲</a><a href="?sort=createdAt">▼</a> | Name <a href="?sort=-name">▲</a><a href="?sort=name">▼</a>
   </p>
@@ -18,7 +18,7 @@
     <button type="submit">Erstellen</button>
   </form>
   <table>
-    {{range $i, $a := .Categorys}}
+    {{range $i, $a := .CategoryWvrs}}
     <tr>
       <td><a href="{{$a.Name}}" target="_blank">{{$a.Name}}</a></td>
       <td><a href="?action=remove&id={{$a.ID.Hex}}">X</a></td>

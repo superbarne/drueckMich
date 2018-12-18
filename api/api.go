@@ -6,6 +6,7 @@ import "encoding/json"
 func Configure(mux *http.ServeMux) {
 	mux.Handle("/user", http.HandlerFunc(userHandler))
 	mux.Handle("/bookmark", http.HandlerFunc(bookmarkHandler))
+	mux.Handle("/import", http.HandlerFunc(importHandler))
 }
 
 func respondWithError(w http.ResponseWriter, code int, msg string) {

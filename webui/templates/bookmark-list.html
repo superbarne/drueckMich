@@ -9,6 +9,7 @@
 </head>
 <body>
   <a href="/category">Kategorien</a>
+  <a href="/category-wvr">Kategorien WVR</a>
   <form>
     <input type="url" name="url">
     <input type="hidden" name="action" value="create">
@@ -94,5 +95,10 @@
   {{ end }}
 
   <a href="?action=removeUser">Benutzer löschen</a>
+
+  <form action="/import" enctype="multipart/form-data" method="post">
+    <input type="file" name="file"/>
+    <button type="submit">Import</button>
+  </form>
 </body>
 </html>

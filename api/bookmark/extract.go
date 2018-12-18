@@ -43,6 +43,7 @@ func Extract(bookmark *Bookmark) {
 			log.Fatal(err)
 		}
 		wert = absURL.String()
+		AnalyzeImage(wert, bookmark)
 	}
 
 }

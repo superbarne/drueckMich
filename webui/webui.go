@@ -17,4 +17,5 @@ func Configure(mux *http.ServeMux) {
 	mux.Handle("/login", http.HandlerFunc(loginHandler))
 	mux.Handle("/app", http.HandlerFunc(bookmarkListHandler))
 	mux.Handle("/category", http.HandlerFunc(categoryListHandler))
+	mux.Handle("/category-wvr", http.HandlerFunc(categoryWvrListHandler))
 }
